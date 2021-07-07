@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SpaceX</string>
+    <string name="ship_type">Ship type</string>
+    <string name="home_port">Home port</string>
 </resources>

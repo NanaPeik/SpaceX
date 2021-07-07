@@ -1,33 +1,46 @@
 package ge.sweeft.spacex
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.lifecycle.MutableLiveData
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.squareup.picasso.Picasso
 import ge.narogava.test.data.ShipView
 
 class SliderAdapter(
-    sliderItems:MutableList<ShipView>,
-    viewPager:ViewPager2
-):RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
+    sliderItems: MutableList<ShipView>,
+    viewPager: ViewPager2
+) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
 
-    private val sliderItems:List<ShipView>
+    private val sliderItems: List<ShipView>
 
     init {
-        this.sliderItems=sliderItems
+        this.sliderItems = sliderItems
     }
 
-    class SliderViewHolder(itemView:View): RecyclerView.ViewHolder(itemView){
-        private val imageView:ImageView=itemView.findViewById(R.id.img_ship)
+    class SliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val imageView: ImageView = itemView.findViewById(R.id.img_ship)
+        private val shipName: TextView = itemView.findViewById(R.id.ship_name_text)
+        private val shipType: TextView = itemView.findViewById(R.id.ship_type_text)
+        private val homePort: TextView = itemView.findViewById(R.id.port_text)
 
-        fun image(sliderItem:ShipView){
-            val imageString=Uri.parse(sliderItem.image)
-            imageView.setImageURI(imageString)
+        fun image(sliderItem: ShipView) {
+            if (sliderItem.image != null) {
+                Picasso.get().load(sliderItem.image).into(imageView)
+            } else {
+                Picasso.get().load(
+                    "https://i.kym-cdn.com/entries/icons/original/000/027/100/_103330503_musk3.jpg"
+                ).into(imageView)
+            }
+
+            shipName.text = sliderItem.ship_name
+            shipType.text = sliderItem.ship_type
+            homePort.text = sliderItem.home_port
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {

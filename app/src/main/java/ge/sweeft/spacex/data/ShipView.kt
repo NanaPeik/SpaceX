@@ -7,7 +7,7 @@ data class ShipView (
     val `class`: Int,
     val course_deg: Any,
     val home_port: String,
-    val image: String,
+    val image: String?,
     val imo: Int,
     val missions: List<Mission>,
     val mmsi: Int,
