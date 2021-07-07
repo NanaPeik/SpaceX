@@ -22,4 +22,27 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/slide_on_off"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/green"
+        android:gravity="center"
+        android:text="@string/start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/speed_change"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/guideline2" />
+
+    <Button
+        android:id="@+id/speed_change"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:text="1X"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/slide_on_off"
+        app:layout_constraintTop_toTopOf="@id/guideline2" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

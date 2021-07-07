@@ -1,24 +1,32 @@
 package ge.sweeft.spacex
 
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.squareup.picasso.Picasso
+import ge.narogava.test.data.Mission
 import ge.narogava.test.data.ShipView
+import kotlin.coroutines.coroutineContext
 
 class SliderAdapter(
     sliderItems: MutableList<ShipView>,
-    viewPager: ViewPager2
+    viewPager2: ViewPager2
 ) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
 
+
     private val sliderItems: List<ShipView>
+    private val viewPager2: ViewPager2
 
     init {
         this.sliderItems = sliderItems
+        this.viewPager2 = viewPager2
     }
 
     class SliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -26,6 +34,7 @@ class SliderAdapter(
         private val shipName: TextView = itemView.findViewById(R.id.ship_name_text)
         private val shipType: TextView = itemView.findViewById(R.id.ship_type_text)
         private val homePort: TextView = itemView.findViewById(R.id.port_text)
+
 
         fun image(sliderItem: ShipView) {
             if (sliderItem.image != null) {
@@ -39,6 +48,13 @@ class SliderAdapter(
             shipName.text = sliderItem.ship_name
             shipType.text = sliderItem.ship_type
             homePort.text = sliderItem.home_port
+
+            imageView.setOnClickListener {
+                val missionList = arrayOf(sliderItem.missions)
+                val imageIntent = Intent("send image missions ")
+                imageIntent.putExtra("missions_list", missionList)
+                LocalBroadcastManager.getInstance(itemView.context).sendBroadcast(imageIntent)
+            }
         }
 
     }
@@ -55,9 +71,21 @@ class SliderAdapter(
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
         holder.image(sliderItems[position])
+        if (position == sliderItems.size - 2) {
+            viewPager2.post(runnable)
+        }
     }
 
     override fun getItemCount(): Int {
         return sliderItems.size
     }
+
+    private val runnable = Runnable {
+        sliderItems.addAll(sliderItems)
+        notifyDataSetChanged()
+    }
+
+//    interface OnImageClickListener {
+//        fun onImageClick(imageData: String?)
+//    }
 }
