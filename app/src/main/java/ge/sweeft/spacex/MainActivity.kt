@@ -1,29 +1,29 @@
 package ge.sweeft.spacex
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import ge.narogava.test.data.ShipView
-import ge.sweeft.spacex.data.RetrofitService
-import ge.sweeft.spacex.data.ShipApi
 import ge.sweeft.spacex.databinding.ActivityMainBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import ge.sweeft.spacex.viewmodel.ShipViewModel
+import androidx.lifecycle.Observer
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : AppCompatActivity(){
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: SliderAdapter
-    private lateinit var viewPagerItems: MutableList<ShipView>
+
+    //    private lateinit var viewPagerItems: MutableList<ShipView>
     private val sliderHandler = Handler()
     private var slideStart = false
     private var speedForUi = 1
     private var speed: Long = 3200
+    private val maxSpeed: Long = 3200
+    private lateinit var shipViewModel: ShipViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        shipViewModel = ViewModelProvider(this).get(ShipViewModel::class.java)
         setViewPager()
+
         binding.viewPagerImageSlider.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -63,7 +65,7 @@ class MainActivity : AppCompatActivity(){
                 speed /= 2
             } else {
                 speedForUi = 1
-                speed = 3200
+                speed = maxSpeed
             }
             binding.speedChange.text = String.format("%dX", speedForUi)
         }
@@ -71,53 +73,20 @@ class MainActivity : AppCompatActivity(){
 
 
     private val slideRunnable = Runnable {
-//        if (binding.viewPagerImageSlider.currentItem == viewPagerItems.size - 1) {
-//            binding.viewPagerImageSlider.currentItem = 0
-//        } else {
         binding.viewPagerImageSlider.currentItem =
             binding.viewPagerImageSlider.currentItem + 1
-//        }
     }
 
     private fun setAdapter(body: MutableList<ShipView>) {
-        this.adapter = SliderAdapter(body, binding.viewPagerImageSlider,)
+        this.adapter = SliderAdapter(body, binding.viewPagerImageSlider)
     }
 
     private fun setViewPager() {
-        val destinationService = RetrofitService.createService(ShipApi::class.java)
-        val requestCall = destinationService.getAllShips()
-        requestCall.enqueue(object : Callback<List<ShipView>> {
-            override fun onResponse(
-                call: Call<List<ShipView>>,
-                response: Response<List<ShipView>>
-            ) {
-                Log.d("Response", "onResponse: ${response.body()}")
 
-                if (response.isSuccessful) {
-                    val ships = response.body()
-                    if (ships != null) {
-                        Log.d("Response", "countrylist size : ${ships.size}")
-                    }
-                    response.body()?.let {
-                        viewPagerItems = it as MutableList<ShipView>
-                        setAdapter(it)
-                    }
-                    binding.viewPagerImageSlider.adapter = adapter
-
-                } else {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Something went wrong ${response.message()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+        shipViewModel.response.observe(this, Observer {
+            if (it != null) {
+                setAdapter(it as MutableList<ShipView>)
             }
-
-            override fun onFailure(call: Call<List<ShipView>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Something went wrong $t", Toast.LENGTH_SHORT)
-                    .show()
-            }
-
         })
     }
 
@@ -129,7 +98,7 @@ class MainActivity : AppCompatActivity(){
     override fun onResume() {
         super.onResume()
         if (slideStart)
-        sliderHandler.postDelayed(slideRunnable, 1000)
+            sliderHandler.postDelayed(slideRunnable, maxSpeed)
     }
 
 }

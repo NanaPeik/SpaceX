@@ -2,10 +2,6 @@ package ge.sweeft.spacex
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ge.sweeft.spacex.data.MissionDetails
-import ge.sweeft.spacex.data.RetrofitService
-import ge.sweeft.spacex.data.ShipApi
-import javax.security.auth.callback.Callback
 
 class MissionsActivity : AppCompatActivity() {
 
