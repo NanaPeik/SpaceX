@@ -5,14 +5,14 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.activity.viewModels
 import androidx.lifecycle.*
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import ge.narogava.test.data.ShipView
+import ge.sweeft.spacex.data.ShipView
 import ge.sweeft.spacex.databinding.ActivityMainBinding
 import ge.sweeft.spacex.viewmodel.ShipViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import ge.narogava.test.data.Mission
-import ge.narogava.test.data.Position
+import ge.sweeft.spacex.adapter.SliderAdapter
+import ge.sweeft.spacex.data.Mission
+import ge.sweeft.spacex.data.Position
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -34,10 +34,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         init()
-//        setViewPager()
+
         shipViewModel.response.observe(this, Observer {
-                setAdapter(it as MutableList<ShipView>)
+            setAdapter(it as MutableList<ShipView>)
         })
+
 
         binding.viewPagerImageSlider.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+
+
         binding.slideOnOff.setOnClickListener {
             slideStart = !slideStart
             if (slideStart) {
@@ -72,49 +75,35 @@ class MainActivity : AppCompatActivity() {
                 speed = maxSpeed
             }
             binding.speedChange.text = String.format("%dX", speedForUi)
+            sliderHandler.postDelayed(slideRunnable, speed)
         }
     }
 
     private fun init() {
         shipViewModel.ships.value = ShipView(
-            1249191,
+            0,
             true,
             null,
-            15252765,
-            null,
-            "Port of Los Angeles",
-            "https://i.imgur.com/woCxpkj.jpg",
-            7434016,
-            listOf(
-                Mission(
-                    "COTS 1",
-                    7
-                ),
-                Mission(
-                    "COTS 2",
-                    8
-                )
-            ),
-            367020820,
-            Position(
-                30.52731,
-                -88.10171
-            ),
-            listOf(
-                "Support Ship",
-                "Barge Tug"
-            ),
-            "AMERICANCHAMPION",
-            null,
-            "American Champion",
-            "Tug",
             0,
-            "Stopped",
             null,
-            "https://www.marinetraffic.com/en/ais/details/ships/shipid:434663/vessel:AMERICAN%20CHAMPION",
-            266712,
-            588000,
-            1976
+            "",
+            "",
+            0,
+            listOf(),
+            0,
+            Position(0.0, 0.0),
+            listOf(),
+            "",
+            null,
+            "",
+            "",
+            0,
+            "",
+            null,
+            "",
+            0,
+            0,
+            0
         )
     }
 
@@ -124,11 +113,10 @@ class MainActivity : AppCompatActivity() {
             binding.viewPagerImageSlider.currentItem + 1
     }
 
-    private fun setAdapter(body: MutableList<ShipView>) {
-        this.adapter = SliderAdapter(body, binding.viewPagerImageSlider)
+    private fun setAdapter(shipList: MutableList<ShipView>) {
+        this.adapter = SliderAdapter(shipList, binding.viewPagerImageSlider)
     }
 
-    private fun setViewPager() { }
 
     override fun onPause() {
         super.onPause()

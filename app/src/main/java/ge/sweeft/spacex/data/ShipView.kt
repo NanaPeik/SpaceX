@@ -1,4 +1,4 @@
-package ge.narogava.test.data
+package ge.sweeft.spacex.data
 
 data class ShipView(
     val abs: Int,

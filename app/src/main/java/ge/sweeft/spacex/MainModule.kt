@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ge.sweeft.spacex.api.RetrofitService
-import ge.sweeft.spacex.api.ShipApi
+import ge.sweeft.spacex.api.JsonApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -15,7 +15,7 @@ import retrofit2.create
 object MainModule {
 
     @Provides
-    fun provideDataSource():ShipApi{
+    fun provideDataSource():JsonApi{
         return Retrofit.Builder()
             .baseUrl(RetrofitService.baseUrl)
             .addConverterFactory(GsonConverterFactory.create())

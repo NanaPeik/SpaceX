@@ -1,4 +1,4 @@
-package ge.sweeft.spacex
+package ge.sweeft.spacex.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -6,17 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.squareup.picasso.Picasso
-import ge.narogava.test.data.ShipView
+import ge.sweeft.spacex.MissionsActivity
+import ge.sweeft.spacex.R
+import ge.sweeft.spacex.data.ShipView
+import ge.sweeft.spacex.databinding.SlideItemContainerBinding
 
 class SliderAdapter(
     sliderItems: MutableList<ShipView>,
     viewPager2: ViewPager2
 ) : RecyclerView.Adapter<SliderAdapter.SliderViewHolder>() {
-
 
     private val sliderItems: List<ShipView>
     private val viewPager2: ViewPager2
@@ -24,14 +25,22 @@ class SliderAdapter(
     init {
         this.sliderItems = sliderItems
         this.viewPager2 = viewPager2
+        viewPager2.adapter = this
     }
 
-    class SliderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class SliderViewHolder(binding: SlideItemContainerBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         private val imageView: ImageView = itemView.findViewById(R.id.img_ship)
         private val shipName: TextView = itemView.findViewById(R.id.ship_name_text)
         private val shipType: TextView = itemView.findViewById(R.id.ship_type_text)
         private val homePort: TextView = itemView.findViewById(R.id.port_text)
 
+        init {
+            binding.imgShip.setOnClickListener {
+                val int = Intent(itemView.context, MissionsActivity::class.java)
+                itemView.context.startActivity(int)
+            }
+        }
 
         fun image(sliderItem: ShipView) {
             if (sliderItem.image != null) {
@@ -46,24 +55,16 @@ class SliderAdapter(
             shipType.text = sliderItem.ship_type
             homePort.text = sliderItem.home_port
 
-            imageView.setOnClickListener {
-                val missionList = arrayOf(sliderItem.missions)
-                val imageIntent = Intent("send image missions ")
-                imageIntent.putExtra("missions_list", missionList)
-                LocalBroadcastManager.getInstance(itemView.context).sendBroadcast(imageIntent)
-            }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SliderViewHolder {
-        return SliderViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.slide_item_container,
-                parent,
-                false
-            )
+        val binding = SlideItemContainerBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        return SliderViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
