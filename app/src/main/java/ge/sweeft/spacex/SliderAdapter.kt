@@ -1,6 +1,5 @@
 package ge.sweeft.spacex
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +10,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.squareup.picasso.Picasso
-import ge.narogava.test.data.Mission
 import ge.narogava.test.data.ShipView
-import kotlin.coroutines.coroutineContext
 
 class SliderAdapter(
     sliderItems: MutableList<ShipView>,
@@ -85,7 +82,4 @@ class SliderAdapter(
         notifyDataSetChanged()
     }
 
-//    interface OnImageClickListener {
-//        fun onImageClick(imageData: String?)
-//    }
 }

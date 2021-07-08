@@ -10,7 +10,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ShipViewModel @Inject internal constructor(var repository: ShipRepository) : ViewModel() {
 
-    private var ships = MutableLiveData<ShipView>()
+    var ships = MutableLiveData<ShipView>()
+
 
     var response:LiveData<List<ShipView>?> = ships.switchMap {
         liveData(Dispatchers.IO) {
