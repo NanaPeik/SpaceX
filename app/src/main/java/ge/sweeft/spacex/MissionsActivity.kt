@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import ge.sweeft.spacex.adapter.LinksAdapter
 import ge.sweeft.spacex.adapter.MissionsAdapter
 import ge.sweeft.spacex.data.MissionDetails
 import ge.sweeft.spacex.databinding.ActivityMissionsBinding
@@ -30,7 +29,6 @@ class MissionsActivity : AppCompatActivity() {
     private lateinit var missionsAdapter: MissionsAdapter
     private var missionLinks = ArrayList<String>()
 
-    private lateinit var linksAdapter: LinksAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
