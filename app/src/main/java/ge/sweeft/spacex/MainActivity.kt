@@ -11,7 +11,6 @@ import ge.sweeft.spacex.databinding.ActivityMainBinding
 import ge.sweeft.spacex.viewmodel.ShipViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ge.sweeft.spacex.adapter.SliderAdapter
-import ge.sweeft.spacex.data.Mission
 import ge.sweeft.spacex.data.Position
 
 @AndroidEntryPoint
@@ -75,7 +74,9 @@ class MainActivity : AppCompatActivity() {
                 speed = maxSpeed
             }
             binding.speedChange.text = String.format("%dX", speedForUi)
-            sliderHandler.postDelayed(slideRunnable, speed)
+            if(slideStart){
+                sliderHandler.postDelayed(slideRunnable, speed)
+            }
         }
     }
 

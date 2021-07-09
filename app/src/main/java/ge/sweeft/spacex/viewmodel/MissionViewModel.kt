@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.sweeft.spacex.api.ShipRepository
 import ge.sweeft.spacex.data.MissionDetails
-import ge.sweeft.spacex.data.ShipView
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 

@@ -3,10 +3,9 @@ package ge.sweeft.spacex.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ge.sweeft.spacex.data.MissionDetails
 import ge.sweeft.spacex.databinding.PopupItemBinding
 
-class LinksAdapter(private var missionsList: MutableList<MissionDetails>) :
+class LinksAdapter(private var missionsList: MutableList<String>) :
     RecyclerView.Adapter<LinksAdapter.ListSelectionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListSelectionViewHolder {
@@ -26,8 +25,8 @@ class LinksAdapter(private var missionsList: MutableList<MissionDetails>) :
     class ListSelectionViewHolder(private val binding: PopupItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun onBind(details: MissionDetails) {
-            binding.link.text = details.wikipedia
+        fun onBind(url: String) {
+            binding.link.text = url
         }
     }
 }
