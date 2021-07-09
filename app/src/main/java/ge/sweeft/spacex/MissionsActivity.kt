@@ -1,12 +1,14 @@
 package ge.sweeft.spacex
 
-import android.app.AlertDialog
+import android.app.Activity
+import android.app.Dialog
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.ListView
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,14 +31,12 @@ class MissionsActivity : AppCompatActivity() {
     private var missionLinks = ArrayList<String>()
 
     private lateinit var linksAdapter: LinksAdapter
-    private lateinit var linkBinding: FragmentLinkBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMissionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        linkBinding = FragmentLinkBinding.inflate(layoutInflater)
         init()
         missionViewModel.response.observe(this, {
             setMissionsAdapter(it as MutableList<MissionDetails>)
@@ -45,20 +45,23 @@ class MissionsActivity : AppCompatActivity() {
         manageSearchView()
 
         binding.openLinks.setOnClickListener {
-
-            val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-            builder.setTitle("Links")
-
-            builder.setView(R.layout.fragment_link)
-
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
-
-            linksAdapter = LinksAdapter(missionLinks)
-            linkBinding.linkRecycler.layoutManager =
-                LinearLayoutManager(this)
-            linkBinding.linkRecycler.adapter = linksAdapter
+            showDialog(this)
         }
+    }
+
+    private fun showDialog(activity:Activity){
+        val dialog=Dialog(activity)
+        dialog.setContentView(R.layout.fragment_link)
+
+        val listView:ListView=dialog.findViewById(R.id.listview)
+        val arrayAdapter=ArrayAdapter(this, R.layout.popup_item,R.id.link,missionLinks)
+        listView.adapter=arrayAdapter
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            Toast.makeText(applicationContext, "You have clicked : " + id, Toast.LENGTH_LONG)
+                .show()
+        }
+        dialog.show()
     }
 
     private fun manageSearchView() {
