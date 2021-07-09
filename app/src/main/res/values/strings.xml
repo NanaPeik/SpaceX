@@ -10,4 +10,6 @@
     <string name="x3">3X</string>
     <string name="x4">4X</string>
     <string name="x5">5X</string>
+    <string name="link">Links</string>
+    <string name="not_found">Not found</string>
 </resources>

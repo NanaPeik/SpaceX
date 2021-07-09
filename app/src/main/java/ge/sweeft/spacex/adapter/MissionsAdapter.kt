@@ -1,6 +1,5 @@
 package ge.sweeft.spacex.adapter
 
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +46,11 @@ class MissionsAdapter(private var missionsList: MutableList<MissionDetails>) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(details: MissionDetails) {
             binding.missionName.text = details.mission_name
-            binding.missionDescription.text = details.description
+            if(details.description.length>50){
+                binding.missionDescription.text = details.description.take(47)+"..."
+            }else{
+                binding.missionDescription.text = details.description
+            }
         }
     }
 }
