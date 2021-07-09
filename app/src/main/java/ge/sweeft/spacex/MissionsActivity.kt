@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -56,8 +58,9 @@ class MissionsActivity : AppCompatActivity() {
         listView.adapter=arrayAdapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            Toast.makeText(applicationContext, "You have clicked : " + id, Toast.LENGTH_LONG)
-                .show()
+            val openUrl=Intent(Intent.ACTION_VIEW)
+            openUrl.data= Uri.parse(missionLinks[position])
+            startActivity(openUrl)
         }
         dialog.show()
     }
