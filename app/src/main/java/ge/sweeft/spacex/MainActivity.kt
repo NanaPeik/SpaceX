@@ -12,14 +12,15 @@ import ge.sweeft.spacex.viewmodel.ShipViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ge.sweeft.spacex.adapter.SliderAdapter
 import ge.sweeft.spacex.data.Position
+import kotlinx.coroutines.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var adapter: SliderAdapter
+    private var coroutineScope = CoroutineScope(Dispatchers.Main.immediate)
 
-    private val sliderHandler = Handler()
     private var slideStart = false
     private var speedForUi = 1
     private var speed: Long = 3200
@@ -38,19 +39,20 @@ class MainActivity : AppCompatActivity() {
             setAdapter(it as MutableList<ShipView>)
         })
 
-
         binding.viewPagerImageSlider.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     if (slideStart) {
-                        sliderHandler.removeCallbacks(slideRunnable)
-                        sliderHandler.postDelayed(slideRunnable, speed)
+                        coroutineScope.coroutineContext.cancelChildren()
+
+                        coroutineScope.launch {
+                            slide(speed)
+                        }
                     }
                 }
             }
         )
-
 
         binding.slideOnOff.setOnClickListener {
             slideStart = !slideStart
@@ -59,10 +61,11 @@ class MainActivity : AppCompatActivity() {
             } else {
                 binding.slideOnOff.text = getString(R.string.start)
             }
-            sliderHandler.removeCallbacks(slideRunnable)
+            coroutineScope.coroutineContext.cancelChildren()
             if (slideStart) {
-
-                sliderHandler.postDelayed(slideRunnable, speed)
+                coroutineScope.launch {
+                    slide(speed)
+                }
             }
         }
         binding.speedChange.setOnClickListener {
@@ -74,8 +77,10 @@ class MainActivity : AppCompatActivity() {
                 speed = maxSpeed
             }
             binding.speedChange.text = String.format("%dX", speedForUi)
-            if(slideStart){
-                sliderHandler.postDelayed(slideRunnable, speed)
+            if (slideStart) {
+                coroutineScope.launch {
+                    slide(speed)
+                }
             }
         }
     }
@@ -108,26 +113,29 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-
-    private val slideRunnable = Runnable {
-        binding.viewPagerImageSlider.currentItem =
-            binding.viewPagerImageSlider.currentItem + 1
+    private suspend fun slide(speed: Long) {
+        withContext(Dispatchers.Main) {
+            delay(speed)
+            binding.viewPagerImageSlider.currentItem =
+                binding.viewPagerImageSlider.currentItem + 1
+        }
     }
 
     private fun setAdapter(shipList: MutableList<ShipView>) {
         this.adapter = SliderAdapter(shipList, binding.viewPagerImageSlider)
     }
 
-
     override fun onPause() {
         super.onPause()
-        sliderHandler.removeCallbacks(slideRunnable)
+        coroutineScope.coroutineContext.cancelChildren()
     }
 
     override fun onResume() {
         super.onResume()
         if (slideStart)
-            sliderHandler.postDelayed(slideRunnable, maxSpeed)
+            coroutineScope.launch {
+                slide(speed)
+            }
     }
 
 }
