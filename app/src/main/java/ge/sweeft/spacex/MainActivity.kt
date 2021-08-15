@@ -130,6 +130,11 @@ class MainActivity : AppCompatActivity() {
         coroutineScope.coroutineContext.cancelChildren()
     }
 
+    override fun onStop() {
+        super.onStop()
+        coroutineScope.coroutineContext.cancelChildren()
+    }
+
     override fun onResume() {
         super.onResume()
         if (slideStart)

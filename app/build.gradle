@@ -61,12 +61,9 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_dep"
     //live data switchMap
     implementation "androidx.paging:paging-runtime-ktx:3.1.0-alpha02"
-    //viewModel and liveData
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //kotlin coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
@@ -76,20 +73,19 @@ dependencies {
     // https://mvnrepository.com/artifact/org.json/json
     implementation 'org.json:json:20210307'
 
-    implementation 'com.google.dagger:hilt-android:2.37'
-    annotationProcessor 'com.google.dagger:hilt-compiler:2.37'
-
     // For instrumentation tests
     androidTestImplementation  'com.google.dagger:hilt-android-testing:2.37'
     androidTestAnnotationProcessor 'com.google.dagger:hilt-compiler:2.37'
-
     // For local unit tests
     testImplementation 'com.google.dagger:hilt-android-testing:2.37'
     testAnnotationProcessor 'com.google.dagger:hilt-compiler:2.37'
-
     implementation 'com.google.dagger:hilt-android:2.37'
     kapt 'com.google.dagger:hilt-compiler:2.37'
+    annotationProcessor 'com.google.dagger:hilt-compiler:2.37'
+
+    //viewModel and liveData
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
 
-    implementation "android.arch.lifecycle:extensions:1.1.1"
 }
